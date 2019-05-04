@@ -23,6 +23,7 @@ void Socket::Bind(SockAddr *sa)
     if(bind(sock_fd, sa->getSockAddr(), sa->size()) < 0)
     {
         /*....*/
+        printf("error %s\n", strerror(errno));
         throw "bind error";
     }
 }
@@ -32,6 +33,7 @@ void Socket::Connect(SockAddr *sa)
     if(connect(sock_fd, sa->getSockAddr(), sa->size()) < 0)
     {
         /*....*/
+        printf("error %s\n", strerror(errno));
         throw "connect error";
     }
 }
@@ -46,6 +48,7 @@ void Socket::Listen(int backlog)
     if(listen(sock_fd, backlog) < 0)
     {
         /*....*/
+        printf("error %s\n", strerror(errno));
         throw "listen error";
     }
 }
@@ -55,12 +58,22 @@ Socket *Socket::Accept(SockAddr *sa)
     int n;
     Socket *sock = new Socket();
     struct sockaddr _sa;
-    socklen_t lenght;
+    socklen_t lenght = NULL;
 
+    memset(&_sa, 0, sizeof (_sa));
+
+    again:
     if((n = accept(sock_fd, &_sa, &lenght)) < 0)
     {
-        /*.....*/
-        throw "accept error";
+        if(errno == ECONNABORTED)
+        {
+            printf("error %s. Trying again\n", strerror(errno));
+            goto again;
+        }
+        else {
+            printf("error %s\n", strerror(errno));
+            throw "error accept";
+        }
     }
 
     sock->sock_fd = n;
@@ -80,6 +93,7 @@ int Socket::Read(char *buf, int length)
 
     if(n < 0)
     {
+        printf("error %s\n", strerror(errno));
         throw "read error";
     }
 
@@ -100,7 +114,7 @@ int Socket::Writen(char *buf, int length)
         if((nwritten = write(sock_fd, ptr, nleft)) <= 0)
         {
             /*....*/
-
+            printf("error %s\n", strerror(errno));
             return -1;
         }
 

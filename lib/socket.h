@@ -4,8 +4,10 @@
 #include <sys/types.h> /* basic system data types */
 #include <sys/socket.h> /* basic socket defns */
 #include <netinet/in.h> /* sockaddr_in{} and other Internet defns */
+#include <errno.h> /* For error*/
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
 
 
 #include "sockaddr.h"

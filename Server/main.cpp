@@ -23,7 +23,10 @@ void str_echo(Socket *sockfd)
     while(true)
     {
         if( (n = sockfd->Read(buf, MAXLINE)) == 0)
+        {
+            std::cout << "close conection with " << getpid() << std::endl;
             return;
+        }
 
         sockfd->Writen(buf, n);
     }
