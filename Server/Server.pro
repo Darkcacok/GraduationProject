@@ -4,10 +4,10 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        main.cpp \
-        sockaddr.cpp \
-        socket.cpp
+        ../lib/sockaddr.cpp \
+        ../lib/socket.cpp \
+        main.cpp
 
 HEADERS += \
-    sockaddr.h \
-    socket.h
+    ../lib/sockaddr.h \
+    ../lib/socket.h
